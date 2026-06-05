@@ -229,12 +229,14 @@ long long countInversions(int weights[], int N) {
 // -----------------------------------------------------------------------
 void saveToFile(int seed, const string& content) {
     ofstream fout;  // TODO: open "problem.txt" in append mode
+    fout.open("problem.txt", ios::app); // append mode and open
     if (!fout.is_open()) {
         cout << "Failed to open problem.txt" << endl;
         return;
     }
     fout << "== seed: " << seed << " ==" << endl;
     // TODO: write content to file
+    fout << content << endl;
     fout << string(40, '=') << "\n\n";
     fout.close();
 }
@@ -244,6 +246,7 @@ void saveToFile(int seed, const string& content) {
 // TODO 5: Implement generateJobs
 // -----------------------------------------------------------------------
 void generateJobs(long long K, int& M, int& R, Job jobs[], mt19937& rng) {
+
 
 }
 
