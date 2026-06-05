@@ -52,7 +52,91 @@ void generateWeights(int& N, int weights[], mt19937& rng) {
 // -----------------------------------------------------------------------
 // TODO 2: Implement mergeSortCount
 // -----------------------------------------------------------------------
+// Mege Sort Logic 
+// 1. Divide : Split list until the length of list is 1 or 2 
+// 2. Conquer : Combine left list and right list
+
+// Basic concept is Recurrence
+// 9, 7, 10, 15, 18, 2, 1, 4 -> left = 0, right = 7 => id = 3
+// Divide   : 9, 7, 10, 15 -> left = 0, right = 3 
+//          : 18, 2, 1, 4 left = 4, right = 7
+// Divide   : 9, 7  -> left = 0, right = 1 
+//          : 10, 15 -> left = 2, right = 3
+//          : 18, 2 -> left = 4, right = 5 
+//          : 1, 4 -> left = 6, right = 7
+// Conqure  : 7, 9 -> left = 0, right = 1
+//          : 10, 15 -> left = 2, right = 3 ...
+
+// Merge two sorted halves and count inversions
+void merge(int* arr, int left, int mid, int right) {
+    // Merge Logic : 
+    // Conqure  : 7, 9 -> left = 0, right = 1
+    //          : 10, 15 -> left = 2, right = 3 ...
+    // compare left of left list and left of right list (Here we can figure out the left and right list each have already been sorted)
+    // put smaller value at the list and update the next index and the index of index of list which had smaller value
+
+    // this is because the merge sort are not "in-place"
+    int container[right - left + 1]; 
+    int leftIndex = left;
+    int rightIndex = mid + 1;
+    int containerIndex = 0;
+
+    // Merge two sorted halves and count inversions
+    while (leftIndex <= mid && rightIndex <= right) {
+        if (arr[leftIndex] <= arr[rightIndex]) {
+            container[containerIndex++] = arr[leftIndex++];
+        } else {
+            container[containerIndex++] = arr[rightIndex++];
+        }
+    }
+
+    // For remains of left list or right list, put them in container
+    while (leftIndex <= mid) {
+        container[containerIndex++] = arr[leftIndex++];
+    }
+    while (rightIndex <= right) {
+        container[containerIndex++] = arr[rightIndex++];
+    }
+
+    // copy the sorted container back to original array
+    for (int i = 0; i < containerIndex; i++) {
+        arr[left + i] = container[i];
+    }
+}
+
+void mergeSort(int* arr, int left, int right) {
+
+    // 0. Base case: single element has no inversions
+    if (left >= right) {
+        return;
+    }
+
+    // 1. Divide the array -> setting the mid index
+    int mid = (left + right) / 2 ;
+    mergeSort(arr, left, mid); // left list
+    mergeSort(arr, mid + 1, right); // right list
+
+    // merge : The left and right lists are already sorted, so we can merge them and count inversions at the same time
+    merge(arr, left, mid, right); // merge two sorted halves and count inversions
+    
+}
+
+
 long long mergeSortCount(int arr[], int left, int right) {
+
+    // 0. Base case: single element has no inversions
+    if (left >= right) {
+        return 0; 
+    }
+
+    // 1. Divide the array -> setting the mid index
+    int mid = (left + right) / 2 ;
+    mergeSortCount(arr, left, mid); // left list
+    mergeSortCount(arr, mid + 1, right); // right list
+
+    // merge : The left and right lists are already sorted, so we can merge them and count inversions at the same time
+    merge(arr, left, mid, right); // merge two sorted halves and count inversions
+    
     return 0;
 }
 
@@ -112,17 +196,20 @@ int main() {
     int weights[30];
     generateWeights(N, weights, rng);
 
-    // print(N, weights);
+    mergeSort(weights,0, N-1);
+    print(N, weights);
+    
 
-    string p1 = "Q. The following is a sequence of " + to_string(N) +
-                " parts arriving in shuffled order.\n"
-                "   What is the minimum number of adjacent swaps to sort"
-                " the sequence in ascending order?\n   ";
-    for (int i = 0; i < N; i++) p1 += to_string(weights[i]) + " ";
-    p1 += "\n";
+    // string p1 = "Q. The following is a sequence of " + to_string(N) +
+    //             " parts arriving in shuffled order.\n"
+    //             "   What is the minimum number of adjacent swaps to sort"
+    //             " the sequence in ascending order?\n   ";
+    // for (int i = 0; i < N; i++) p1 += to_string(weights[i]) + " ";
+    // p1 += "\n";
 
-    long long K = countInversions(weights, N);
-    cout << p1 << "A. " << K << "\n" << endl;
+    // long long K = countInversions(weights, N);
+    // cout << p1 << "A. " << K << "\n" << endl;
+
 
     // // Part 2
     // int M, R;
