@@ -1,5 +1,5 @@
 CC = clang++
-CFLAGS = -std=c++14 -Wall -Wextra -O2
+CFLAGS = -std=c++17 -Wall -Wextra -O2
 
 P1_SRC = 20250000_PJT2_P1.cpp
 P2_SRC = 20250000_PJT2_P2.cpp

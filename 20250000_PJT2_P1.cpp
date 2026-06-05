@@ -17,13 +17,22 @@ struct Job {
     int id;
     int start;
     int end;
+
+    // For debugging: print Job details
+    friend ostream& operator<<(ostream& os, const Job& job) {
+    os << "{id: " << job.id
+       << ", start: " << job.start
+       << ", end: " << job.end << "},\n";
+    return os;
+    }
 };
 
 
 /*
     print Function for Debugging
 */
-void print(int N, int* weights) {
+template<typename T>
+void print(int N, T* weights) {
     cout << "N: " << N << "\nweights: ";
     for (int i = 0; i < N; i++) {
         cout << weights[i] << " ";
@@ -245,9 +254,28 @@ void saveToFile(int seed, const string& content) {
 // -----------------------------------------------------------------------
 // TODO 5: Implement generateJobs
 // -----------------------------------------------------------------------
+long long Max(long long a, long long b) {
+    return (a > b) ? a : b;
+}
+
+
 void generateJobs(long long K, int& M, int& R, Job jobs[], mt19937& rng) {
+    // K : time consumed for sorting Parts
+    // M : number of jobs (from 8 to 15)
+    // R : rest time between jobs
+    // jobs : array of Job struct with id, start time and end time
 
+    R = (int) (K % 5) + 1;
+    M = uniform_int_distribution<int>(8, 15)(rng);
 
+    for (int i = 0; i < M; i++) {
+        jobs[i].id = i + 1; // Job IDs start from 1
+        jobs[i].start = uniform_int_distribution<int>(Max(0,K-8), K + 25)(rng); // Start time >= K
+        int duration = uniform_int_distribution<int>(2, 10)(rng); // Duration between 1 and 10
+        jobs[i].end = jobs[i].start + duration;
+    }
+
+    print(M, jobs); // Debugging: print generated jobs
 }
 
 
@@ -289,10 +317,10 @@ int main() {
     cout << p1 << "A. " << K << "\n" << endl;
 
 
-    // // Part 2
-    // int M, R;
-    // Job jobs[15];
-    // generateJobs(K, M, R, jobs, rng);
+    // Part 2
+    int M, R;
+    Job jobs[15];
+    generateJobs(K, M, R, jobs, rng);
 
     // string p2 = "[Machine available from time K=" + to_string(K) +
     //             ", rest time R=" + to_string(R) + "]\n";
