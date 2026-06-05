@@ -45,8 +45,10 @@ void print(int N, int* weights) {
 void FY_shuffle(int weights[], int N, int K, mt19937& rng, bool DEBUG = false) {
     for (int i = 0; i < K; i++) {
         for (int j = N-1; j > 0; j--) {
-            uniform_int_distribution<int> dist(0, j);
-            int k = dist(rng);
+            // This declaration has continously regenerate the Object of dist.... -> not consistent
+            // uniform_int_distribution<int> dist(0, j);
+            // int k = dist(rng);
+            int k = uniform_int_distribution<int>(0, j)(rng);
             swap(weights[j], weights[k]);
             if (DEBUG) {
                 print(N, weights);
@@ -61,17 +63,21 @@ void generateWeights(int& N, int weights[], mt19937& rng) {
     // initalize the random length (from 10 to 30) of array with random seed
     uniform_int_distribution<int> range(10, 30); 
     N = range(rng);
+
+    // This must be the second one.
+    uniform_int_distribution<int> shuffleRange(1, 10);
+    int K_shuffle = shuffleRange(rng);
+
+    // This must be out of the loop.....
+    uniform_int_distribution<int> weightRange(1, 100);
     for (int i = 0; i < N; i++) {
-        uniform_int_distribution<int> weightRange(1, 100);
         weights[i] = weightRange(rng);
     }
     for (int i = N; i < 30; i++) {
         weights[i] = -1; // Fill remaining with -1 for clarity
     }
 
-    uniform_int_distribution<int> shuffleRange(1, 10);
-    int K_shuffle = shuffleRange(rng);
-    FY_shuffle(weights, N, K_shuffle, rng, true);
+    FY_shuffle(weights, N, K_shuffle, rng, false);
 }
 
 // -----------------------------------------------------------------------
