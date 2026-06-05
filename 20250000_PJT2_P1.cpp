@@ -57,8 +57,14 @@ void FY_shuffle(int weights[], int N, int K, mt19937& rng, bool DEBUG = false) {
     }
 }
 
+// https://stackoverflow.com/questions/70841470/c-pseudo-random-number-generator-not-dependent-on-kernel-version
+/*
+std::mt19937 is specified to produce the same sequence of numbers for the same seed for all implementations. 
+std::uniform_int_distribution is specified to produce a uniform distribution, but the details are not specified, and the result can differ for different implementations.
+*/
+
 void generateWeights(int& N, int weights[], mt19937& rng) {
-    // 0. Init : random seed, weights :  array and already initialized to 30, rng -> random valuge generator
+    // 0. Init : random generator, weights :  array and already initialized to 30, rng -> random valuge generator
     
     // initalize the random length (from 10 to 30) of array with random seed
     uniform_int_distribution<int> range(10, 30); 
@@ -68,7 +74,7 @@ void generateWeights(int& N, int weights[], mt19937& rng) {
     uniform_int_distribution<int> shuffleRange(1, 10);
     int K_shuffle = shuffleRange(rng);
 
-    // This must be out of the loop.....
+    // This must be out of the loop.....?
     uniform_int_distribution<int> weightRange(1, 100);
     for (int i = 0; i < N; i++) {
         weights[i] = weightRange(rng);
@@ -166,7 +172,10 @@ long long mergeCount(int* arr, int left, int mid, int right) {
             container[containerIndex++] = arr[leftIndex++];
         } else {
             container[containerIndex++] = arr[rightIndex++];
-            inv_num += 1;
+            // Lets suppose 1 7 9 10 ,  2 3 4 5 
+            // left index will be fixed to 1 unitl right index goes to the end for right index
+            // then 2 will pass 7 9 10 -> (mid - leftIndex + 1)
+            inv_num += (mid - leftIndex + 1); // Count inversions: all remaining elements in left half are greater than arr[rightIndex]
         }
     }
 
