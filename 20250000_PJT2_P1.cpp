@@ -292,9 +292,16 @@ int maxNonOverlappingJobs(long long K, int R, Job jobs[], int M) {
             if (jobs[i].end > jobs[j].end) {
                 swap(jobs[i], jobs[j]);
             }
+            else if (jobs[i].end == jobs[j].end) {
+                if (jobs[i].start > jobs[j].start) {
+                            swap(jobs[i], jobs[j]);
+                }
+            }
         }
     }
 
+    // seed = 666
+    // (132 -> 138) => 141 => (149 -> 151) => 154 => (157 -> 166)
     int count = 0;
     int last_end_time = K;
     for (int i = 0; i < M; i++) {
