@@ -20,13 +20,34 @@ struct Job {
 };
 
 
+/*
+    print Function for Debugging
+*/
+void print(int N, int* weights) {
+    cout << "N: " << N << "\nweights: ";
+    for (int i = 0; i < N; i++) {
+        cout << weights[i] << " ";
+    }
+    cout << "\n\n";
+}
+
 // -----------------------------------------------------------------------
 // TODO 1: Implement generateWeights
 // -----------------------------------------------------------------------
 void generateWeights(int& N, int weights[], mt19937& rng) {
-
+    // 0. Init : random seed, weights :  array and already initialized to 30, rng -> random valuge generator
+    
+    // initalize the random length (from 10 to 30) of array with random seed
+    std::uniform_int_distribution<int> range(10, 30); 
+    N = range(rng);
+    for (int i = 0; i < N; i++) {
+        std::uniform_int_distribution<int> weightRange(1, 100);
+        weights[i] = weightRange(rng);
+    }
+    for (int i = N; i < 30; i++) {
+        weights[i] = -1; // Fill remaining with -1 for clarity
+    }
 }
-
 
 // -----------------------------------------------------------------------
 // TODO 2: Implement mergeSortCount
@@ -91,6 +112,8 @@ int main() {
     int weights[30];
     generateWeights(N, weights, rng);
 
+    // print(N, weights);
+
     string p1 = "Q. The following is a sequence of " + to_string(N) +
                 " parts arriving in shuffled order.\n"
                 "   What is the minimum number of adjacent swaps to sort"
@@ -101,30 +124,30 @@ int main() {
     long long K = countInversions(weights, N);
     cout << p1 << "A. " << K << "\n" << endl;
 
-    // Part 2
-    int M, R;
-    Job jobs[15];
-    generateJobs(K, M, R, jobs, rng);
+    // // Part 2
+    // int M, R;
+    // Job jobs[15];
+    // generateJobs(K, M, R, jobs, rng);
 
-    string p2 = "[Machine available from time K=" + to_string(K) +
-                ", rest time R=" + to_string(R) + "]\n";
-    p2 += "Q. What is the maximum number of non-overlapping jobs with start_time >= K?\n";
-    p2 += "   Job   Start   End\n";
-    p2 += "   ---   -----   ---\n";
-    for (int i = 0; i < M; i++) {
-        string idStr = to_string(jobs[i].id);
-        string startStr = to_string(jobs[i].start);
-        string endStr = to_string(jobs[i].end);
-        p2 += "   " + idStr + string(6 - idStr.length(), ' ')
-              + startStr + string(8 - startStr.length(), ' ')
-              + endStr + "\n";
-    }
+    // string p2 = "[Machine available from time K=" + to_string(K) +
+    //             ", rest time R=" + to_string(R) + "]\n";
+    // p2 += "Q. What is the maximum number of non-overlapping jobs with start_time >= K?\n";
+    // p2 += "   Job   Start   End\n";
+    // p2 += "   ---   -----   ---\n";
+    // for (int i = 0; i < M; i++) {
+    //     string idStr = to_string(jobs[i].id);
+    //     string startStr = to_string(jobs[i].start);
+    //     string endStr = to_string(jobs[i].end);
+    //     p2 += "   " + idStr + string(6 - idStr.length(), ' ')
+    //           + startStr + string(8 - startStr.length(), ' ')
+    //           + endStr + "\n";
+    // }
 
-    int ans2 = maxNonOverlappingJobs(K, R, jobs, M);
-    cout << p2 << "A. " << ans2 << endl;
+    // int ans2 = maxNonOverlappingJobs(K, R, jobs, M);
+    // cout << p2 << "A. " << ans2 << endl;
 
-    string fullContent = p1 + "A. " + to_string(K) + "\n\n" + p2 + "A. " + to_string(ans2) + "\n";
-    saveToFile(seed, fullContent);
+    // string fullContent = p1 + "A. " + to_string(K) + "\n\n" + p2 + "A. " + to_string(ans2) + "\n";
+    // saveToFile(seed, fullContent);
 
     return 0;
 }
