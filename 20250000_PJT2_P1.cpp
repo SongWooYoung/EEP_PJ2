@@ -5,7 +5,7 @@
  * Part 2: Schedule machine jobs starting from time K
  *
  * Allowed libraries: <iostream>, <fstream>, <random>, <string>
- * Prohibited: std::sort, std::shuffle, std::random_shuffle
+ * Prohibited: sort, shuffle, random_shuffle
  ****************************************************************************/
 #include <iostream>
 #include <fstream>
@@ -34,19 +34,44 @@ void print(int N, int* weights) {
 // -----------------------------------------------------------------------
 // TODO 1: Implement generateWeights
 // -----------------------------------------------------------------------
+
+/*
+ * For each shuffle pass:
+ *    For i from N−1 down to 1:
+ *      Generate a random index j in [0, i]
+ *      Swap weights[i] and weights[j]
+ */
+
+void FY_shuffle(int weights[], int N, int K, mt19937& rng, bool DEBUG = false) {
+    for (int i = 0; i < K; i++) {
+        for (int j = N-1; j > 0; j--) {
+            uniform_int_distribution<int> dist(0, j);
+            int k = dist(rng);
+            swap(weights[j], weights[k]);
+            if (DEBUG) {
+                print(N, weights);
+            }
+        }
+    }
+}
+
 void generateWeights(int& N, int weights[], mt19937& rng) {
     // 0. Init : random seed, weights :  array and already initialized to 30, rng -> random valuge generator
     
     // initalize the random length (from 10 to 30) of array with random seed
-    std::uniform_int_distribution<int> range(10, 30); 
+    uniform_int_distribution<int> range(10, 30); 
     N = range(rng);
     for (int i = 0; i < N; i++) {
-        std::uniform_int_distribution<int> weightRange(1, 100);
+        uniform_int_distribution<int> weightRange(1, 100);
         weights[i] = weightRange(rng);
     }
     for (int i = N; i < 30; i++) {
         weights[i] = -1; // Fill remaining with -1 for clarity
     }
+
+    uniform_int_distribution<int> shuffleRange(1, 10);
+    int K_shuffle = shuffleRange(rng);
+    FY_shuffle(weights, N, K_shuffle, rng, true);
 }
 
 // -----------------------------------------------------------------------
@@ -56,30 +81,78 @@ void generateWeights(int& N, int weights[], mt19937& rng) {
 // 1. Divide : Split list until the length of list is 1 or 2 
 // 2. Conquer : Combine left list and right list
 
-// Basic concept is Recurrence
-// 9, 7, 10, 15, 18, 2, 1, 4 -> left = 0, right = 7 => id = 3
-// Divide   : 9, 7, 10, 15 -> left = 0, right = 3 
-//          : 18, 2, 1, 4 left = 4, right = 7
-// Divide   : 9, 7  -> left = 0, right = 1 
-//          : 10, 15 -> left = 2, right = 3
-//          : 18, 2 -> left = 4, right = 5 
-//          : 1, 4 -> left = 6, right = 7
-// Conqure  : 7, 9 -> left = 0, right = 1
-//          : 10, 15 -> left = 2, right = 3 ...
+// // Basic concept is Recurrence
+// // 9, 7, 10, 15, 18, 2, 1, 4 -> left = 0, right = 7 => id = 3
+// // Divide   : 9, 7, 10, 15 -> left = 0, right = 3 
+// //          : 18, 2, 1, 4 left = 4, right = 7
+// // Divide   : 9, 7  -> left = 0, right = 1 
+// //          : 10, 15 -> left = 2, right = 3
+// //          : 18, 2 -> left = 4, right = 5 
+// //          : 1, 4 -> left = 6, right = 7
+// // Conqure  : 7, 9 -> left = 0, right = 1
+// //          : 10, 15 -> left = 2, right = 3 ...
 
-// Merge two sorted halves and count inversions
-void merge(int* arr, int left, int mid, int right) {
-    // Merge Logic : 
-    // Conqure  : 7, 9 -> left = 0, right = 1
-    //          : 10, 15 -> left = 2, right = 3 ...
-    // compare left of left list and left of right list (Here we can figure out the left and right list each have already been sorted)
-    // put smaller value at the list and update the next index and the index of index of list which had smaller value
+// // Merge two sorted halves and count inversions
+// void merge(int* arr, int left, int mid, int right) {
+//     // Merge Logic : 
+//     // Conqure  : 7, 9 -> left = 0, right = 1
+//     //          : 10, 15 -> left = 2, right = 3 ...
+//     // compare left of left list and left of right list (Here we can figure out the left and right list each have already been sorted)
+//     // put smaller value at the list and update the next index and the index of index of list which had smaller value
 
-    // this is because the merge sort are not "in-place"
+//     // this is because the merge sort are not "in-place"
+//     int container[right - left + 1]; 
+//     int leftIndex = left;
+//     int rightIndex = mid + 1;
+//     int containerIndex = 0;
+
+//     // Merge two sorted halves and count inversions
+//     while (leftIndex <= mid && rightIndex <= right) {
+//         if (arr[leftIndex] <= arr[rightIndex]) {
+//             container[containerIndex++] = arr[leftIndex++];
+//         } else {
+//             container[containerIndex++] = arr[rightIndex++];
+//         }
+//     }
+
+//     // For remains of left list or right list, put them in container
+//     while (leftIndex <= mid) {
+//         container[containerIndex++] = arr[leftIndex++];
+//     }
+//     while (rightIndex <= right) {
+//         container[containerIndex++] = arr[rightIndex++];
+//     }
+
+//     // copy the sorted container back to original array
+//     for (int i = 0; i < containerIndex; i++) {
+//         arr[left + i] = container[i];
+//     }
+// }
+
+// void mergeSort(int* arr, int left, int right) {
+
+//     // 0. Base case: single element has no inversions
+//     if (left >= right) {
+//         return;
+//     }
+
+//     // 1. Divide the array -> setting the mid index
+//     int mid = (left + right) / 2 ;
+//     mergeSort(arr, left, mid); // left list
+//     mergeSort(arr, mid + 1, right); // right list
+
+//     // merge : The left and right lists are already sorted, so we can merge them and count inversions at the same time
+//     merge(arr, left, mid, right); // merge two sorted halves and count inversions
+    
+// }
+
+long long mergeCount(int* arr, int left, int mid, int right) {
+
     int container[right - left + 1]; 
     int leftIndex = left;
     int rightIndex = mid + 1;
     int containerIndex = 0;
+    long long inv_num = 0;
 
     // Merge two sorted halves and count inversions
     while (leftIndex <= mid && rightIndex <= right) {
@@ -87,6 +160,7 @@ void merge(int* arr, int left, int mid, int right) {
             container[containerIndex++] = arr[leftIndex++];
         } else {
             container[containerIndex++] = arr[rightIndex++];
+            inv_num += 1;
         }
     }
 
@@ -102,42 +176,22 @@ void merge(int* arr, int left, int mid, int right) {
     for (int i = 0; i < containerIndex; i++) {
         arr[left + i] = container[i];
     }
+
+    return inv_num;
 }
-
-void mergeSort(int* arr, int left, int right) {
-
-    // 0. Base case: single element has no inversions
-    if (left >= right) {
-        return;
-    }
-
-    // 1. Divide the array -> setting the mid index
-    int mid = (left + right) / 2 ;
-    mergeSort(arr, left, mid); // left list
-    mergeSort(arr, mid + 1, right); // right list
-
-    // merge : The left and right lists are already sorted, so we can merge them and count inversions at the same time
-    merge(arr, left, mid, right); // merge two sorted halves and count inversions
-    
-}
-
 
 long long mergeSortCount(int arr[], int left, int right) {
-
-    // 0. Base case: single element has no inversions
     if (left >= right) {
-        return 0; 
+        return 0;
     }
 
-    // 1. Divide the array -> setting the mid index
-    int mid = (left + right) / 2 ;
-    mergeSortCount(arr, left, mid); // left list
-    mergeSortCount(arr, mid + 1, right); // right list
+    int mid = (left + right) / 2;
+    long long inv_count = 0;
+    inv_count += mergeSortCount(arr, left, mid);
+    inv_count += mergeSortCount(arr, mid + 1, right);
+    inv_count += mergeCount(arr, left, mid, right);
 
-    // merge : The left and right lists are already sorted, so we can merge them and count inversions at the same time
-    merge(arr, left, mid, right); // merge two sorted halves and count inversions
-    
-    return 0;
+    return inv_count;
 }
 
 
@@ -145,7 +199,13 @@ long long mergeSortCount(int arr[], int left, int right) {
 // TODO 3: Implement countInversions
 // -----------------------------------------------------------------------
 long long countInversions(int weights[], int N) {
-    return 0;
+    // 1. Because we must not modify the original weights array, we must duplicate the array to the dumps
+    int dumps[30];
+    for (int i = 0; i < N; i++) {
+        dumps[i] = weights[i];
+    }
+
+    return mergeSortCount(dumps, 0, N - 1);
 }
 
 
@@ -196,19 +256,19 @@ int main() {
     int weights[30];
     generateWeights(N, weights, rng);
 
-    mergeSort(weights,0, N-1);
-    print(N, weights);
+    // mergeSort(weights,0, N-1);
+    // print(N, weights);
     
 
-    // string p1 = "Q. The following is a sequence of " + to_string(N) +
-    //             " parts arriving in shuffled order.\n"
-    //             "   What is the minimum number of adjacent swaps to sort"
-    //             " the sequence in ascending order?\n   ";
-    // for (int i = 0; i < N; i++) p1 += to_string(weights[i]) + " ";
-    // p1 += "\n";
+    string p1 = "Q. The following is a sequence of " + to_string(N) +
+                " parts arriving in shuffled order.\n"
+                "   What is the minimum number of adjacent swaps to sort"
+                " the sequence in ascending order?\n   ";
+    for (int i = 0; i < N; i++) p1 += to_string(weights[i]) + " ";
+    p1 += "\n";
 
-    // long long K = countInversions(weights, N);
-    // cout << p1 << "A. " << K << "\n" << endl;
+    long long K = countInversions(weights, N);
+    cout << p1 << "A. " << K << "\n" << endl;
 
 
     // // Part 2
