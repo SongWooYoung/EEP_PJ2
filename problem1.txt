@@ -1,0 +1,108 @@
+== seed: 40 ==
+Q. The following is a sequence of 16 parts arriving in shuffled order.
+   What is the minimum number of adjacent swaps to sort the sequence in ascending order?
+   50 20 51 75 13 32 92 74 38 56 60 84 57 97 66 72 
+A. 37
+
+[Machine available from time K=37, rest time R=3]
+Q. What is the maximum number of non-overlapping jobs with start_time >= K?
+   Job   Start   End
+   ---   -----   ---
+   1     50      55
+   2     55      64
+   3     48      52
+   4     38      46
+   5     54      64
+   6     46      55
+   7     42      51
+   8     61      63
+   9     29      37
+   10    32      35
+A. 3
+
+========================================
+
+== seed: 666 ==
+Q. The following is a sequence of 22 parts arriving in shuffled order.
+   What is the minimum number of adjacent swaps to sort the sequence in ascending order?
+   64 37 31 83 52 95 29 92 71 70 96 74 62 15 61 46 63 40 98 17 31 47 
+A. 132
+
+[Machine available from time K=132, rest time R=3]
+Q. What is the maximum number of non-overlapping jobs with start_time >= K?
+   Job   Start   End
+   ---   -----   ---
+   1     149     151
+   2     128     131
+   3     134     140
+   4     139     145
+   5     157     166
+   6     153     157
+   7     126     130
+   8     130     140
+   9     129     139
+   10    129     132
+   11    134     140
+   12    132     138
+A. 3
+
+========================================
+
+== seed: 7 ==
+Q. The following is a sequence of 25 parts arriving in shuffled order.
+   What is the minimum number of adjacent swaps to sort the sequence in ascending order?
+   1 26 68 76 84 90 24 69 61 49 58 8 20 15 7 45 40 91 73 45 93 43 56 9 24 
+A. 160
+
+[Machine available from time K=160, rest time R=1]
+Q. What is the maximum number of non-overlapping jobs with start_time >= K?
+   Job   Start   End
+   ---   -----   ---
+   1     161     170
+   2     173     179
+   3     179     187
+   4     185     192
+   5     173     183
+   6     164     170
+   7     159     166
+   8     167     171
+   9     180     182
+   10    157     162
+   11    165     167
+   12    175     178
+   13    179     181
+   14    183     185
+   15    170     177
+A. 4
+
+========================================
+
+== seed: 100 ==
+Q. The following is a sequence of 18 parts arriving in shuffled order.
+   What is the minimum number of adjacent swaps to sort the sequence in ascending order?
+   80 16 11 54 95 15 99 49 59 35 99 88 17 67 53 61 25 68 
+A. 69
+
+[Machine available from time K=69, rest time R=5]
+Q. What is the maximum number of non-overlapping jobs with start_time >= K?
+   Job   Start   End
+   ---   -----   ---
+   1     91      95
+   2     63      72
+   3     78      80
+   4     71      78
+   5     91      96
+   6     89      96
+   7     79      87
+   8     78      81
+   9     86      90
+   10    76      83
+   11    83      92
+   12    84      89
+   13    78      81
+   14    90      92
+   15    80      88
+A. 2
+
+========================================
+

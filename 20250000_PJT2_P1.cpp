@@ -169,6 +169,7 @@ void generateWeights(int& N, int weights[], mt19937& rng) {
 
 long long mergeCount(int* arr, int left, int mid, int right) {
 
+    //clang++ -std=c++17 -Wall -Wextra -O2 -o P1 20250000_PJT2_P1.cpp 20250000_PJT2_P1.cpp:172:19: warning: variable length arrays in C++ are a Clang extension [-Wvla-cxx-extension]
     int container[right - left + 1]; 
     int leftIndex = left;
     int rightIndex = mid + 1;
@@ -238,9 +239,9 @@ long long countInversions(int weights[], int N) {
 // -----------------------------------------------------------------------
 void saveToFile(int seed, const string& content) {
     ofstream fout;  // TODO: open "problem.txt" in append mode
-    fout.open("problem.txt", ios::app); // append mode and open
+    fout.open("problem1.txt", ios::app); // append mode and open
     if (!fout.is_open()) {
-        cout << "Failed to open problem.txt" << endl;
+        cout << "Failed to open problem1.txt" << endl;
         return;
     }
     fout << "== seed: " << seed << " ==" << endl;
@@ -283,7 +284,27 @@ void generateJobs(long long K, int& M, int& R, Job jobs[], mt19937& rng) {
 // TODO 6: Implement maxNonOverlappingJobs
 // -----------------------------------------------------------------------
 int maxNonOverlappingJobs(long long K, int R, Job jobs[], int M) {
-    return 0;
+    
+    // 1. Sort jobs by end time (Greedy approach for interval scheduling)
+    // bubble sort (under 20 -> it shows greater performance than other algorithms)
+    for (int i = 0; i < M; i++) {
+        for (int j = i + 1; j < M; j++) {
+            if (jobs[i].end > jobs[j].end) {
+                swap(jobs[i], jobs[j]);
+            }
+        }
+    }
+
+    int count = 0;
+    int last_end_time = K;
+    for (int i = 0; i < M; i++) {
+        if (jobs[i].start >= last_end_time) {
+            count++;
+            last_end_time = jobs[i].end + R;
+        }
+    }
+
+    return count;
 }
 
 
@@ -322,25 +343,25 @@ int main() {
     Job jobs[15];
     generateJobs(K, M, R, jobs, rng);
 
-    // string p2 = "[Machine available from time K=" + to_string(K) +
-    //             ", rest time R=" + to_string(R) + "]\n";
-    // p2 += "Q. What is the maximum number of non-overlapping jobs with start_time >= K?\n";
-    // p2 += "   Job   Start   End\n";
-    // p2 += "   ---   -----   ---\n";
-    // for (int i = 0; i < M; i++) {
-    //     string idStr = to_string(jobs[i].id);
-    //     string startStr = to_string(jobs[i].start);
-    //     string endStr = to_string(jobs[i].end);
-    //     p2 += "   " + idStr + string(6 - idStr.length(), ' ')
-    //           + startStr + string(8 - startStr.length(), ' ')
-    //           + endStr + "\n";
-    // }
+    string p2 = "[Machine available from time K=" + to_string(K) +
+                ", rest time R=" + to_string(R) + "]\n";
+    p2 += "Q. What is the maximum number of non-overlapping jobs with start_time >= K?\n";
+    p2 += "   Job   Start   End\n";
+    p2 += "   ---   -----   ---\n";
+    for (int i = 0; i < M; i++) {
+        string idStr = to_string(jobs[i].id);
+        string startStr = to_string(jobs[i].start);
+        string endStr = to_string(jobs[i].end);
+        p2 += "   " + idStr + string(6 - idStr.length(), ' ')
+              + startStr + string(8 - startStr.length(), ' ')
+              + endStr + "\n";
+    }
 
-    // int ans2 = maxNonOverlappingJobs(K, R, jobs, M);
-    // cout << p2 << "A. " << ans2 << endl;
+    int ans2 = maxNonOverlappingJobs(K, R, jobs, M);
+    cout << p2 << "A. " << ans2 << endl;
 
-    // string fullContent = p1 + "A. " + to_string(K) + "\n\n" + p2 + "A. " + to_string(ans2) + "\n";
-    // saveToFile(seed, fullContent);
+    string fullContent = p1 + "A. " + to_string(K) + "\n\n" + p2 + "A. " + to_string(ans2) + "\n";
+    saveToFile(seed, fullContent);
 
     return 0;
 }
