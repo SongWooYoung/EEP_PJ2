@@ -106,3 +106,75 @@ A. 2
 
 ========================================
 
+== seed: 40 ==
+Q. The following is a sequence of 20 parts arriving in shuffled order.
+   What is the minimum number of adjacent swaps to sort the sequence in ascending order?
+   38 12 7 37 87 4 14 38 27 48 36 8 13 18 77 5 68 32 30 36 
+A. 88
+
+[Machine available from time K=88, rest time R=4]
+Q. What is the maximum number of non-overlapping jobs with start_time >= K?
+   Job   Start   End
+   ---   -----   ---
+   1     110     117
+   2     112     117
+   3     100     109
+   4     94      103
+   5     107     116
+   6     90      95
+   7     84      90
+   8     96      106
+   9     104     111
+   10    101     108
+   11    111     120
+   12    111     118
+   13    84      86
+A. 3
+
+========================================
+
+== seed: 40 ==
+Q. The following is a sequence of 20 parts arriving in shuffled order.
+   What is the minimum number of adjacent swaps to sort the sequence in ascending order?
+   68 32 87 4 14 30 12 38 38 37 36 27 48 36 7 18 8 5 13 77 
+A. 112
+
+[Machine available from time K=112, rest time R=3]
+Q. What is the maximum number of non-overlapping jobs with start_time >= K?
+   Job   Start   End
+   ---   -----   ---
+   1     118     125
+   2     118     127
+   3     117     125
+   4     124     128
+   5     131     140
+   6     131     133
+   7     125     132
+   8     136     141
+   9     124     133
+A. 3
+
+========================================
+
+== seed: 666 ==
+Q. The following is a sequence of 12 parts arriving in shuffled order.
+   What is the minimum number of adjacent swaps to sort the sequence in ascending order?
+   52 75 59 36 18 75 30 3 5 38 51 89 
+A. 35
+
+[Machine available from time K=35, rest time R=1]
+Q. What is the maximum number of non-overlapping jobs with start_time >= K?
+   Job   Start   End
+   ---   -----   ---
+   1     54      56
+   2     46      54
+   3     36      41
+   4     40      44
+   5     51      60
+   6     38      47
+   7     47      52
+   8     48      53
+A. 3
+
+========================================
+

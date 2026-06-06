@@ -51,13 +51,19 @@ void print(int N, T* weights) {
  *      Swap weights[i] and weights[j]
  */
 
+int drawInt(mt19937& rng, int low, int high) {
+    return low + (int)(rng() % (unsigned int)(high - low + 1));
+}
+
+
 void FY_shuffle(int weights[], int N, int K, mt19937& rng, bool DEBUG = false) {
     for (int i = 0; i < K; i++) {
         for (int j = N-1; j > 0; j--) {
             // This declaration has continously regenerate the Object of dist.... -> not consistent
             // uniform_int_distribution<int> dist(0, j);
             // int k = dist(rng);
-            int k = uniform_int_distribution<int>(0, j)(rng);
+            //int k = uniform_int_distribution<int>(0, j)(rng);
+            int k = drawInt(rng, 0, j); // This is because the uniform_int_distribution can cause different result for different implementations. So I implement my own function to draw random int with uniform distribution.
             swap(weights[j], weights[k]);
             if (DEBUG) {
                 print(N, weights);
@@ -72,21 +78,26 @@ std::mt19937 is specified to produce the same sequence of numbers for the same s
 std::uniform_int_distribution is specified to produce a uniform distribution, but the details are not specified, and the result can differ for different implementations.
 */
 
+
 void generateWeights(int& N, int weights[], mt19937& rng) {
     // 0. Init : random generator, weights :  array and already initialized to 30, rng -> random valuge generator
     
     // initalize the random length (from 10 to 30) of array with random seed
-    uniform_int_distribution<int> range(10, 30); 
-    N = range(rng);
+    // uniform_int_distribution<int> range(10, 30); 
+    // N = range(rng);
+    N = drawInt(rng, 10, 30); // This is because the uniform_int_distribution can cause different result for different implementations. So I implement my own function to draw random int with uniform distribution.
 
     // This must be the second one.
-    uniform_int_distribution<int> shuffleRange(1, 10);
-    int K_shuffle = shuffleRange(rng);
+    // uniform_int_distribution<int> shuffleRange(1, 10);
+    // int K_shuffle = shuffleRange(rng);
+
+    int K_shuffle = drawInt(rng, 1, 10); // This is because the uniform_int_distribution can cause different result for different implementations. So I implement my own function to draw random int with uniform distribution.
 
     // This must be out of the loop.....?
-    uniform_int_distribution<int> weightRange(1, 100);
+    //uniform_int_distribution<int> weightRange(1, 100);
     for (int i = 0; i < N; i++) {
-        weights[i] = weightRange(rng);
+        //weights[i] = weightRange(rng);
+        weights[i] = drawInt(rng, 1, 100); // This is because the uniform_int_distribution can cause different result for different implementations. So I implement my own function to draw random int with uniform distribution.
     }
     for (int i = N; i < 30; i++) {
         weights[i] = -1; // Fill remaining with -1 for clarity
