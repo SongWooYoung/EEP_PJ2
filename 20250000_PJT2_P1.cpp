@@ -278,16 +278,19 @@ void generateJobs(long long K, int& M, int& R, Job jobs[], mt19937& rng) {
     // jobs : array of Job struct with id, start time and end time
 
     R = (int) (K % 5) + 1;
-    M = uniform_int_distribution<int>(8, 15)(rng);
+    //M = uniform_int_distribution<int>(8, 15)(rng);
+    M = drawInt(rng, 8, 15); // This is because the uniform_int_distribution can cause different result for different implementations. So I implement my own function to draw random int with uniform distribution.
 
     for (int i = 0; i < M; i++) {
         jobs[i].id = i + 1; // Job IDs start from 1
-        jobs[i].start = uniform_int_distribution<int>(Max(0,K-8), K + 25)(rng); // Start time >= K
-        int duration = uniform_int_distribution<int>(2, 10)(rng); // Duration between 1 and 10
+        //jobs[i].start = uniform_int_distribution<int>(Max(0,K-8), K + 25)(rng); // Start time >= K
+        jobs[i].start = drawInt(rng, Max(0, (int)K - 8), (int)K + 25); // This is because the uniform_int_distribution can cause different result for different implementations. So I implement my own function to draw random int with uniform distribution.
+        //int duration = uniform_int_distribution<int>(2, 10)(rng); // Duration between 1 and 10
+        int duration = drawInt(rng, 2, 10); // This is because the uniform_int_distribution can cause different result for different implementations. So I implement my own function to draw random int with uniform distribution.
         jobs[i].end = jobs[i].start + duration;
     }
 
-    print(M, jobs); // Debugging: print generated jobs
+    //print(M, jobs); // Debugging: print generated jobs
 }
 
 

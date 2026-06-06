@@ -93,6 +93,9 @@ void eliminateColumn(int n, double matrix[MAX_N][MAX_N + 1], int pivot) {
         
         // Subtract (factor * pivot row) from the current row 
         view[i].subtractScaledRow(view[pivot], matrix[i][pivot]);
+
+        //cout << "Debug: After eliminating column " << pivot << " for row " << i << ":\n";
+        //cout << view << endl;
     }
 
 }
@@ -102,9 +105,9 @@ void reduceToIdentity(int n, double matrix[MAX_N][MAX_N + 1]) {
     for (int pivot = 0; pivot < n; pivot++) {
         normalizePivotRow(n, matrix, pivot);
 
-        // cout << "Debug: After normalizing pivot " << pivot << ":\n";
-        // MatrixView view{n, matrix};
-        // cout << view << endl;
+        cout << "Debug: After normalizing pivot " << pivot << ":\n";
+        //MatrixView view{n, matrix};
+        //cout << view << endl;
         eliminateColumn(n, matrix, pivot);
 
         cout << "After pivot " << pivot << ":\n";

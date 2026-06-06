@@ -178,3 +178,69 @@ A. 3
 
 ========================================
 
+== seed: 666 ==
+Q. The following is a sequence of 12 parts arriving in shuffled order.
+   What is the minimum number of adjacent swaps to sort the sequence in ascending order?
+   52 75 59 36 18 75 30 3 5 38 51 89 
+A. 35
+
+[Machine available from time K=35, rest time R=1]
+Q. What is the maximum number of non-overlapping jobs with start_time >= K?
+   Job   Start   End
+   ---   -----   ---
+   1     54      56
+   2     46      54
+   3     36      41
+   4     40      44
+   5     51      60
+   6     38      47
+   7     47      52
+   8     48      53
+A. 3
+
+========================================
+
+== seed: 666 ==
+Q. The following is a sequence of 12 parts arriving in shuffled order.
+   What is the minimum number of adjacent swaps to sort the sequence in ascending order?
+   52 75 59 36 18 75 30 3 5 38 51 89 
+A. 35
+
+[Machine available from time K=35, rest time R=1]
+Q. What is the maximum number of non-overlapping jobs with start_time >= K?
+   Job   Start   End
+   ---   -----   ---
+   1     54      56
+   2     46      54
+   3     36      41
+   4     40      44
+   5     51      60
+   6     38      47
+   7     47      52
+   8     48      53
+A. 3
+
+========================================
+
+== seed: 666 ==
+Q. The following is a sequence of 12 parts arriving in shuffled order.
+   What is the minimum number of adjacent swaps to sort the sequence in ascending order?
+   52 75 59 36 18 75 30 3 5 38 51 89 
+A. 35
+
+[Machine available from time K=35, rest time R=1]
+Q. What is the maximum number of non-overlapping jobs with start_time >= K?
+   Job   Start   End
+   ---   -----   ---
+   1     41      48
+   2     53      60
+   3     50      56
+   4     38      44
+   5     34      44
+   6     35      40
+   7     48      53
+   8     56      66
+A. 3
+
+========================================
+
