@@ -27,6 +27,13 @@ struct RowView {
         return *this;
     }
 
+    //Row_i = Row_i - (factor * Row_pivot)
+    void subtractScaledRow(const RowView& pivotRow, double factor) {
+        for (int i = 0; i < width; i++) {
+            row[i] -= factor * pivotRow.row[i];
+        }
+    }
+
 };
 
 
@@ -69,19 +76,10 @@ void readAugmentedMatrix(ifstream& inputFile, int& n, double matrix[MAX_N][MAX_N
 }
 
 void normalizePivotRow(int n, double matrix[MAX_N][MAX_N + 1], int pivot) {
-    // TODO: Fill this function
-    // 1. At pivot-th column, unify the pivot row 
-    // it is for sure that if prev step is done correctly,  
-    // values under pivot-th column is 0, except the pivot row.
 
-    double pivotVal = matrix[pivot][pivot];
-
+    // Hust follows the instructure...
     MatrixView view{n, matrix};
-    // view[i] is temporary Object , which is not permiitted to be used as left of friend function
-    // Change scalar division operator to Member function to solve this problem
-    for (int i = pivot; i < n; i++) {
-        view[i] /= (pivotVal / matrix[i][pivot]);
-    }
+    view[pivot] /= view[pivot].row[pivot];
 
 }
 
@@ -90,7 +88,10 @@ void eliminateColumn(int n, double matrix[MAX_N][MAX_N + 1], int pivot) {
     // 1. Eliminate the pivot-th column, except the pivot row.
     MatrixView view{n, matrix};
     for (int i = pivot+1; i < n; i++) {
-        view[i] -= view[pivot];
+        if (i == pivot) continue; // Skip the pivot row
+        
+        // Subtract (factor * pivot row) from the current row 
+        view[i].subtractScaledRow(view[pivot], matrix[i][pivot]);
     }
 
 }
@@ -99,21 +100,29 @@ void reduceToIdentity(int n, double matrix[MAX_N][MAX_N + 1]) {
     // TODO: Fill this function
     for (int pivot = 0; pivot < n; pivot++) {
         normalizePivotRow(n, matrix, pivot);
+
+        cout << "Debug: After normalizing pivot " << pivot << ":\n";
+        MatrixView view{n, matrix};
+        cout << view << endl;
+
         eliminateColumn(n, matrix, pivot);
 
         cout << "After pivot " << pivot << ":\n";
-        MatrixView view{n, matrix};
-        cout << view;
+        // MatrixView view{n, matrix};
+        cout << view << endl;
     }
 }
 
 
 void printSolution(int n, double matrix[MAX_N][MAX_N + 1]) {
     // TODO: Fill this function
-    // Print Last column values as solution
+
+    // 0. Reversely get the value 
+
+    // 1. Print Last column values as solution
 
     for (int i = 0; i < n; i++) {
-        cout << "x[" << i << "] = " << matrix[i][n] << endl;
+        cout << "x[" << i << "] = " << (int) matrix[i][n] << endl;
     }
 
 }
