@@ -79,7 +79,8 @@ void normalizePivotRow(int n, double matrix[MAX_N][MAX_N + 1], int pivot) {
 
     // Hust follows the instructure...
     MatrixView view{n, matrix};
-    view[pivot] /= view[pivot].row[pivot];
+    double pivotValue = matrix[pivot][pivot]; // It must be saved.... if do not, varied matrix[pivot][pivot] valu ruins everything
+    view[pivot] /= pivotValue;
 
 }
 
@@ -87,7 +88,7 @@ void eliminateColumn(int n, double matrix[MAX_N][MAX_N + 1], int pivot) {
     // TODO: Fill this function
     // 1. Eliminate the pivot-th column, except the pivot row.
     MatrixView view{n, matrix};
-    for (int i = pivot+1; i < n; i++) {
+    for (int i = 0; i < n; i++) {
         if (i == pivot) continue; // Skip the pivot row
         
         // Subtract (factor * pivot row) from the current row 
@@ -101,14 +102,13 @@ void reduceToIdentity(int n, double matrix[MAX_N][MAX_N + 1]) {
     for (int pivot = 0; pivot < n; pivot++) {
         normalizePivotRow(n, matrix, pivot);
 
-        cout << "Debug: After normalizing pivot " << pivot << ":\n";
-        MatrixView view{n, matrix};
-        cout << view << endl;
-
+        // cout << "Debug: After normalizing pivot " << pivot << ":\n";
+        // MatrixView view{n, matrix};
+        // cout << view << endl;
         eliminateColumn(n, matrix, pivot);
 
         cout << "After pivot " << pivot << ":\n";
-        // MatrixView view{n, matrix};
+        MatrixView view{n, matrix};
         cout << view << endl;
     }
 }
@@ -116,11 +116,10 @@ void reduceToIdentity(int n, double matrix[MAX_N][MAX_N + 1]) {
 
 void printSolution(int n, double matrix[MAX_N][MAX_N + 1]) {
     // TODO: Fill this function
-
-    // 0. Reversely get the value 
+ 
 
     // 1. Print Last column values as solution
-
+    // Since all final solution values are guaranteed to be integers, Use the variable name "start" as the loop variable when printing the final solution values.Example: for (int start = 0; start < n; start++) print them as integers.
     for (int i = 0; i < n; i++) {
         cout << "x[" << i << "] = " << (int) matrix[i][n] << endl;
     }
