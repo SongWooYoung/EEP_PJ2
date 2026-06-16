@@ -105,12 +105,12 @@ void reduceToIdentity(int n, double matrix[MAX_N][MAX_N + 1]) {
     for (int pivot = 0; pivot < n; pivot++) {
         normalizePivotRow(n, matrix, pivot);
 
-        cout << "Debug: After normalizing pivot " << pivot << ":\n";
-        //MatrixView view{n, matrix};
-        //cout << view << endl;
+        // cout << "Debug: After normalizing pivot " << pivot << ":\n";
+        // MatrixView view{n, matrix};
+        // cout << view << endl;
         eliminateColumn(n, matrix, pivot);
 
-        cout << "After pivot " << pivot << ":\n";
+        cout << "After pivot " << pivot << "\n";
         MatrixView view{n, matrix};
         cout << view << endl;
     }
