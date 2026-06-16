@@ -30,14 +30,15 @@ struct Job {
 
 /*
     print Function for Debugging
+    slightly modigfied for console ouput
 */
 template<typename T>
 void print(int N, T* weights) {
-    cout << "N: " << N << "\nweights: ";
+    // cout << "N: " << N << "\nweights: ";
     for (int i = 0; i < N; i++) {
         cout << weights[i] << " ";
     }
-    cout << "\n\n";
+    cout << endl;
 }
 
 // -----------------------------------------------------------------------
@@ -57,6 +58,11 @@ int drawInt(mt19937& rng, int low, int high) {
 
 
 void FY_shuffle(int weights[], int N, int K, mt19937& rng, bool DEBUG = false) {
+    
+    // This is for console output which is mentioned but I forgot to implements
+    cout << "[Initial array]: ";
+    print(N, weights);
+
     for (int i = 0; i < K; i++) {
         for (int j = N-1; j > 0; j--) {
             // This declaration has continously regenerate the Object of dist.... -> not consistent
@@ -65,9 +71,10 @@ void FY_shuffle(int weights[], int N, int K, mt19937& rng, bool DEBUG = false) {
             //int k = uniform_int_distribution<int>(0, j)(rng);
             int k = drawInt(rng, 0, j); // This is because the uniform_int_distribution can cause different result for different implementations. So I implement my own function to draw random int with uniform distribution.
             swap(weights[j], weights[k]);
-            if (DEBUG) {
-                print(N, weights);
-            }
+        }
+        if (DEBUG) {
+            cout << "[After shuffle #" << i + 1 << "]: ";
+            print(N, weights);
         }
     }
 }
@@ -103,7 +110,7 @@ void generateWeights(int& N, int weights[], mt19937& rng) {
         weights[i] = -1; // Fill remaining with -1 for clarity
     }
 
-    FY_shuffle(weights, N, K_shuffle, rng, false);
+    FY_shuffle(weights, N, K_shuffle, rng, true);
 }
 
 // -----------------------------------------------------------------------
@@ -236,12 +243,20 @@ long long mergeSortCount(int arr[], int left, int right) {
 // -----------------------------------------------------------------------
 long long countInversions(int weights[], int N) {
     // 1. Because we must not modify the original weights array, we must duplicate the array to the dumps
+    long long result = 0;
     int dumps[30];
     for (int i = 0; i < N; i++) {
         dumps[i] = weights[i];
     }
 
-    return mergeSortCount(dumps, 0, N - 1);
+    result = mergeSortCount(dumps, 0, N - 1);
+
+    // this is for console output
+    cout << "[Sorted (ascending)]: ";
+    print(N, dumps);
+    cout << endl;
+
+    return result;
 }
 
 

@@ -1,8 +1,8 @@
 CC = clang++
 CFLAGS = -std=c++17 -Wall -Wextra -O2
 
-P1_SRC = 20250000_PJT2_P1.cpp
-P2_SRC = 20250000_PJT2_P2.cpp
+P1_SRC = 20211163_PJT2_P1.cpp
+P2_SRC = 20251163_PJT2_P2.cpp
 
 .PHONY: all clean
 

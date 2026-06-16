@@ -122,7 +122,6 @@ void printSolution(int n, double matrix[MAX_N][MAX_N + 1]) {
  
 
     // 1. Print Last column values as solution
-    // Since all final solution values are guaranteed to be integers, Use the variable name "start" as the loop variable when printing the final solution values.Example: for (int start = 0; start < n; start++) print them as integers.
     for (int i = 0; i < n; i++) {
         cout << "x[" << i << "] = " << (int) matrix[i][n] << endl;
     }
